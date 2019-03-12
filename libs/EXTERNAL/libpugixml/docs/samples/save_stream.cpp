@@ -2,8 +2,7 @@
 
 #include <iostream>
 
-int main()
-{
+int main() {
     // get a test document
     pugi::xml_document doc;
     doc.load_string("<foo bar='baz'><call>hey</call></foo>");

@@ -2,11 +2,10 @@
 
 #include <iostream>
 
-int main()
-{
+int main() {
     pugi::xml_document doc;
 
-// tag::code[]
+    // tag::code[]
     const char* source = "<!--comment--><node>&lt;</node>";
 
     // Parsing with default options; note that comment node is not added to the tree, and entity reference &lt; is expanded
@@ -24,7 +23,7 @@ int main()
     // Parsing with minimal option mask; comment node is not added to the tree, and &lt; is not expanded
     doc.load_string(source, pugi::parse_minimal);
     std::cout << "First node value: [" << doc.first_child().value() << "], node child value: [" << doc.child_value("node") << "]\n";
-// end::code[]
+    // end::code[]
 }
 
 // vim:et

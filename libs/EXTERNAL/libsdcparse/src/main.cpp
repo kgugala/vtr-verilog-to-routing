@@ -9,9 +9,9 @@ void print_string_group(const StringGroup& group);
 void print_from_to_group(const StringGroup& from, const StringGroup& to);
 
 class PrintCallback : public Callback {
-public:
+    public:
     //Start of parsing
-    void start_parse() override { }
+    void start_parse() override {}
 
     //Sets current filename
     void filename(std::string fname) override { filename_ = fname; }
@@ -22,12 +22,12 @@ public:
     void create_clock(const CreateClock& cmd) override {
         printf("#%s:%d\n", filename_.c_str(), lineno_);
         printf("create_clock -period %f -waveform {%f %f} ",
-                cmd.period,
-                cmd.rise_edge,
-                cmd.fall_edge);
-        if(cmd.is_virtual) {
+            cmd.period,
+            cmd.rise_edge,
+            cmd.fall_edge);
+        if (cmd.is_virtual) {
             printf("-name %s",
-                   cmd.name.c_str());
+                cmd.name.c_str());
         } else {
             print_string_group(cmd.targets);
         }
@@ -36,7 +36,7 @@ public:
 
     void set_io_delay(const SetIoDelay& cmd) override {
         printf("#%s:%d\n", filename_.c_str(), lineno_);
-        if(cmd.type == IoDelayType::INPUT) {
+        if (cmd.type == IoDelayType::INPUT) {
             printf("set_input_delay");
         } else {
             printf("set_output_delay");
@@ -52,20 +52,18 @@ public:
         printf(" %f ", cmd.delay);
         print_string_group(cmd.target_ports);
         printf("\n");
-
     }
     void set_clock_groups(const SetClockGroups& cmd) override {
         printf("#%s:%d\n", filename_.c_str(), lineno_);
         printf("set_clock_groups");
-        if(cmd.type == ClockGroupsType::EXCLUSIVE) {
+        if (cmd.type == ClockGroupsType::EXCLUSIVE) {
             printf(" -exclusive");
         }
-        for(const auto& clk_grp : cmd.clock_groups) {
+        for (const auto& clk_grp : cmd.clock_groups) {
             printf(" -group ");
             print_string_group(clk_grp);
         }
         printf("\n");
-
     }
 
     void set_false_path(const SetFalsePath& cmd) override {
@@ -76,7 +74,7 @@ public:
     }
     void set_min_max_delay(const SetMinMaxDelay& cmd) override {
         printf("#%s:%d\n", filename_.c_str(), lineno_);
-        if(cmd.type == MinMaxType::MAX) {
+        if (cmd.type == MinMaxType::MAX) {
             printf("set_max_delay");
         } else {
             printf("set_min_delay");
@@ -88,10 +86,10 @@ public:
     void set_multicycle_path(const SetMulticyclePath& cmd) override {
         printf("#%s:%d\n", filename_.c_str(), lineno_);
         printf("set_multicycle_path %d ", cmd.mcp_value);
-        if(cmd.is_setup) {
+        if (cmd.is_setup) {
             printf("-setup ");
         }
-        if(cmd.is_hold) {
+        if (cmd.is_hold) {
             printf("-hold ");
         }
         print_from_to_group(cmd.from, cmd.to);
@@ -100,10 +98,10 @@ public:
     void set_clock_uncertainty(const SetClockUncertainty& cmd) override {
         printf("#%s:%d\n", filename_.c_str(), lineno_);
         printf("set_clock_uncertainty ");
-        if(cmd.is_setup) {
+        if (cmd.is_setup) {
             printf("-setup ");
-        } 
-        if(cmd.is_hold) {
+        }
+        if (cmd.is_hold) {
             printf("-hold ");
         }
         print_from_to_group(cmd.from, cmd.to);
@@ -113,13 +111,13 @@ public:
     void set_clock_latency(const SetClockLatency& cmd) override {
         printf("#%s:%d\n", filename_.c_str(), lineno_);
         printf("set_clock_latency ");
-        if(cmd.type == ClockLatencyType::SOURCE) {
+        if (cmd.type == ClockLatencyType::SOURCE) {
             printf("-source ");
         }
-        if(cmd.is_early) {
+        if (cmd.is_early) {
             printf("-early ");
         }
-        if(cmd.is_late) {
+        if (cmd.is_late) {
             printf("-late ");
         }
         printf("%f ", cmd.value);
@@ -131,22 +129,21 @@ public:
         printf("set_disable_timing ");
         print_from_to_group(cmd.from, cmd.to);
         printf("\n");
-
     }
     void set_timing_derate(const SetTimingDerate& cmd) override {
         printf("#%s:%d\n", filename_.c_str(), lineno_);
         printf("set_timing_derate ");
-        if(cmd.is_early) {
+        if (cmd.is_early) {
             printf("-early ");
         }
-        if(cmd.is_late) {
+        if (cmd.is_late) {
             printf("-late ");
         }
 
-        if(cmd.derate_nets) {
+        if (cmd.derate_nets) {
             printf("-net_delay ");
         }
-        if(cmd.derate_cells) {
+        if (cmd.derate_cells) {
             printf("-cell_delay ");
         }
         printf("%f ", cmd.value);
@@ -155,18 +152,18 @@ public:
     }
 
     //End of parsing
-    void finish_parse() override { }
+    void finish_parse() override {}
 
     //Error during parsing
     void parse_error(const int curr_lineno, const std::string& near_text, const std::string& msg) override {
         fprintf(stderr, "Custom Error");
-        if(curr_lineno > 0) {
+        if (curr_lineno > 0) {
             fprintf(stderr, " at line %d", curr_lineno);
         }
-        if(near_text != "") {
-            if(near_text == "\n") {
+        if (near_text != "") {
+            if (near_text == "\n") {
                 fprintf(stderr, " near '\\n'");
-            } else if(near_text == "\n\r") {
+            } else if (near_text == "\n\r") {
                 fprintf(stderr, " near '\\n\\r'");
             } else {
                 fprintf(stderr, " near '%s'", near_text.c_str());
@@ -178,15 +175,14 @@ public:
 
     bool error() { return error_; }
 
-private:
+    private:
     std::string filename_ = "";
     int lineno_ = 0;
     bool error_ = false;
-
 };
 
-int main(int argc, char **argv) {
-    if(argc != 2) {
+int main(int argc, char** argv) {
+    if (argc != 2) {
         fprintf(stderr, "Usage: %s filename.sdc\n", argv[0]);
         fprintf(stderr, "\n");
         fprintf(stderr, "Reads in an SDC file into internal data structures\n");
@@ -197,7 +193,7 @@ int main(int argc, char **argv) {
     PrintCallback callback;
     sdc_parse_filename(argv[1], callback);
 
-    if(callback.error()) {
+    if (callback.error()) {
         return 1;
     }
     return 0;
@@ -205,36 +201,36 @@ int main(int argc, char **argv) {
 
 void print_string_group(const StringGroup& group) {
     const char *start_token, *end_token;
-    if(group.type == StringGroupType::STRING) {
+    if (group.type == StringGroupType::STRING) {
         start_token = "{";
-        end_token   = "}";
+        end_token = "}";
 
     } else if (group.type == StringGroupType::CLOCK) {
         start_token = "[get_clocks {";
-        end_token   = "}]";
+        end_token = "}]";
 
     } else if (group.type == StringGroupType::PORT) {
         start_token = "[get_ports {";
-        end_token   = "}]";
+        end_token = "}]";
 
     } else if (group.type == StringGroupType::CELL) {
         start_token = "[get_cells {";
-        end_token   = "}]";
+        end_token = "}]";
     } else if (group.type == StringGroupType::PIN) {
         start_token = "[get_pins {";
-        end_token   = "}]";
+        end_token = "}]";
 
     } else {
         printf("Unsupported sdc string group type\n");
         exit(1);
     }
 
-    if(!group.strings.empty()) {
+    if (!group.strings.empty()) {
         printf("%s", start_token);
-        for(size_t i = 0; i < group.strings.size(); ++i) {
+        for (size_t i = 0; i < group.strings.size(); ++i) {
             printf("%s", group.strings[i].c_str());
 
-            if(i != group.strings.size() - 1) {
+            if (i != group.strings.size() - 1) {
                 printf(" ");
             }
         }
@@ -243,14 +239,13 @@ void print_string_group(const StringGroup& group) {
 }
 
 void print_from_to_group(const StringGroup& from, const StringGroup& to) {
-    if(!from.strings.empty()) {
+    if (!from.strings.empty()) {
         printf("-from ");
         print_string_group(from);
     }
 
-    if(!to.strings.empty()) {
+    if (!to.strings.empty()) {
         printf(" -to ");
         print_string_group(to);
     }
 }
-

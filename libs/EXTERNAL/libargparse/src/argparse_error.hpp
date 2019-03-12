@@ -3,21 +3,19 @@
 #include <stdexcept>
 namespace argparse {
 
-    class ArgParseError : public std::runtime_error {
-        using std::runtime_error::runtime_error; //Constructors
-    };
+class ArgParseError : public std::runtime_error {
+    using std::runtime_error::runtime_error;  //Constructors
+};
 
-    class ArgParseConversionError : public ArgParseError {
-        using ArgParseError::ArgParseError;
-    };
+class ArgParseConversionError : public ArgParseError {
+    using ArgParseError::ArgParseError;
+};
 
-    class ArgParseHelp {
+class ArgParseHelp {
+};
 
-    };
+class ArgParseVersion {
+};
 
-    class ArgParseVersion {
-
-    };
-
-}
+}  // namespace argparse
 #endif

@@ -5,41 +5,39 @@
 #include <cstring>
 
 // tag::code[]
-struct xml_string_writer: pugi::xml_writer
-{
+struct xml_string_writer : pugi::xml_writer {
     std::string result;
 
-    virtual void write(const void* data, size_t size)
-    {
+    virtual void write(const void* data, size_t size) {
         result.append(static_cast<const char*>(data), size);
     }
 };
 // end::code[]
 
-struct xml_memory_writer: pugi::xml_writer
-{
+struct xml_memory_writer : pugi::xml_writer {
     char* buffer;
     size_t capacity;
 
     size_t result;
 
-    xml_memory_writer(): buffer(0), capacity(0), result(0)
-    {
+    xml_memory_writer()
+        : buffer(0)
+        , capacity(0)
+        , result(0) {
     }
 
-    xml_memory_writer(char* buffer, size_t capacity): buffer(buffer), capacity(capacity), result(0)
-    {
+    xml_memory_writer(char* buffer, size_t capacity)
+        : buffer(buffer)
+        , capacity(capacity)
+        , result(0) {
     }
 
-    size_t written_size() const
-    {
+    size_t written_size() const {
         return result < capacity ? result : capacity;
     }
 
-    virtual void write(const void* data, size_t size)
-    {
-        if (result < capacity)
-        {
+    virtual void write(const void* data, size_t size) {
+        if (result < capacity) {
             size_t chunk = (capacity - result < size) ? capacity - result : size;
 
             memcpy(buffer + result, data, chunk);
@@ -49,17 +47,16 @@ struct xml_memory_writer: pugi::xml_writer
     }
 };
 
-std::string node_to_string(pugi::xml_node node)
-{
+std::string node_to_string(pugi::xml_node node) {
     xml_string_writer writer;
     node.print(writer);
 
     return writer.result;
 }
 
-char* node_to_buffer(pugi::xml_node node, char* buffer, size_t size)
-{
-    if (size == 0) return buffer;
+char* node_to_buffer(pugi::xml_node node, char* buffer, size_t size) {
+    if (size == 0)
+        return buffer;
 
     // leave one character for null terminator
     xml_memory_writer writer(buffer, size - 1);
@@ -71,8 +68,7 @@ char* node_to_buffer(pugi::xml_node node, char* buffer, size_t size)
     return buffer;
 }
 
-char* node_to_buffer_heap(pugi::xml_node node)
-{
+char* node_to_buffer_heap(pugi::xml_node node) {
     // first pass: get required memory size
     xml_memory_writer counter;
     node.print(counter);
@@ -90,8 +86,7 @@ char* node_to_buffer_heap(pugi::xml_node node)
     return buffer;
 }
 
-int main()
-{
+int main() {
     // get a test document
     pugi::xml_document doc;
     doc.load_string("<foo bar='baz'>hey</foo>");

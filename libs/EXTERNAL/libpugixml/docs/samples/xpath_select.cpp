@@ -2,18 +2,17 @@
 
 #include <iostream>
 
-int main()
-{
+int main() {
     pugi::xml_document doc;
-    if (!doc.load_file("xgconsole.xml")) return -1;
+    if (!doc.load_file("xgconsole.xml"))
+        return -1;
 
-// tag::code[]
+    // tag::code[]
     pugi::xpath_node_set tools = doc.select_nodes("/Profile/Tools/Tool[@AllowRemote='true' and @DeriveCaptionFrom='lastparam']");
 
     std::cout << "Tools:\n";
 
-    for (pugi::xpath_node_set::const_iterator it = tools.begin(); it != tools.end(); ++it)
-    {
+    for (pugi::xpath_node_set::const_iterator it = tools.begin(); it != tools.end(); ++it) {
         pugi::xpath_node node = *it;
         std::cout << node.node().attribute("Filename").value() << "\n";
     }
@@ -22,7 +21,7 @@ int main()
 
     if (build_tool)
         std::cout << "Build tool: " << build_tool.node().attribute("Filename").value() << "\n";
-// end::code[]
+    // end::code[]
 }
 
 // vim:et

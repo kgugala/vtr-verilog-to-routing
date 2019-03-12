@@ -3,12 +3,12 @@
 #include <iostream>
 #include <string>
 
-int main()
-{
+int main() {
     pugi::xml_document doc;
-    if (!doc.load_file("xgconsole.xml")) return -1;
+    if (!doc.load_file("xgconsole.xml"))
+        return -1;
 
-// tag::code[]
+    // tag::code[]
     // Select nodes via compiled query
     pugi::xpath_variable_set vars;
     vars.add("remote", pugi::xpath_type_boolean);
@@ -32,7 +32,7 @@ int main()
 
     std::cout << "Local tool imm: ";
     tools_local_imm[0].node().print(std::cout);
-// end::code[]
+    // end::code[]
 }
 
 // vim:et

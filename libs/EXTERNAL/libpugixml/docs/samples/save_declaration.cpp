@@ -2,8 +2,7 @@
 
 #include <iostream>
 
-int main()
-{
+int main() {
     // tag::code[]
     // get a test document
     pugi::xml_document doc;
@@ -15,7 +14,7 @@ int main()
     decl.append_attribute("encoding") = "UTF-8";
     decl.append_attribute("standalone") = "no";
 
-    // <?xml version="1.0" encoding="UTF-8" standalone="no"?> 
+    // <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     // <foo bar="baz">
     //         <call>hey</call>
     // </foo>

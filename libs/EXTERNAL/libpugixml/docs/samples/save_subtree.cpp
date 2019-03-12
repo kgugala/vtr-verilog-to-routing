@@ -2,8 +2,7 @@
 
 #include <iostream>
 
-int main()
-{
+int main() {
     // tag::code[]
     // get a test document
     pugi::xml_document doc;

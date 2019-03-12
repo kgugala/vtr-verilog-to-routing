@@ -2,8 +2,7 @@
 
 #include <iostream>
 
-int main()
-{
+int main() {
     pugi::xml_document doc;
 
     // get a test document

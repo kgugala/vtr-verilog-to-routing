@@ -17,28 +17,27 @@
  * BOOST_FOREACH(xml_node n, doc) {}
  */
 
-namespace boost
-{
-	template<> struct range_mutable_iterator<pugi::xml_node>
-	{
-		typedef pugi::xml_node::iterator type;
-	};
+namespace boost {
+template<>
+struct range_mutable_iterator<pugi::xml_node> {
+    typedef pugi::xml_node::iterator type;
+};
 
-	template<> struct range_const_iterator<pugi::xml_node>
-	{
-		typedef pugi::xml_node::iterator type;
-	};
+template<>
+struct range_const_iterator<pugi::xml_node> {
+    typedef pugi::xml_node::iterator type;
+};
 
-	template<> struct range_mutable_iterator<pugi::xml_document>
-	{
-		typedef pugi::xml_document::iterator type;
-	};
+template<>
+struct range_mutable_iterator<pugi::xml_document> {
+    typedef pugi::xml_document::iterator type;
+};
 
-	template<> struct range_const_iterator<pugi::xml_document>
-	{
-		typedef pugi::xml_document::iterator type;
-	};
-}
+template<>
+struct range_const_iterator<pugi::xml_document> {
+    typedef pugi::xml_document::iterator type;
+};
+}  // namespace boost
 
 /*
  * These types add support for BOOST_FOREACH macro to xml_node and xml_document classes (child/attribute iteration).
@@ -47,17 +46,14 @@ namespace boost
  * BOOST_FOREACH(xml_node n, attributes(doc)) {}
  */
 
-namespace pugi
-{
-	inline xml_object_range<xml_node_iterator> children(const pugi::xml_node& node)
-	{
-		return node.children();
-	}
-
-	inline xml_object_range<xml_attribute_iterator> attributes(const pugi::xml_node& node)
-	{
-		return node.attributes();
-	}
+namespace pugi {
+inline xml_object_range<xml_node_iterator> children(const pugi::xml_node& node) {
+    return node.children();
 }
+
+inline xml_object_range<xml_attribute_iterator> attributes(const pugi::xml_node& node) {
+    return node.attributes();
+}
+}  // namespace pugi
 
 #endif

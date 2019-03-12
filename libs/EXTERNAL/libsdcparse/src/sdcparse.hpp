@@ -96,37 +96,35 @@ struct SetTimingDerate;
 
 struct StringGroup;
 
-
 class Callback {
-
     public:
-        virtual ~Callback() {};
+    virtual ~Callback(){};
 
-        //Start of parsing
-        virtual void start_parse() = 0;
+    //Start of parsing
+    virtual void start_parse() = 0;
 
-        //Sets current filename
-        virtual void filename(std::string fname) = 0;
+    //Sets current filename
+    virtual void filename(std::string fname) = 0;
 
-        //Sets current line number
-        virtual void lineno(int line_num) = 0;
+    //Sets current line number
+    virtual void lineno(int line_num) = 0;
 
-        virtual void create_clock(const CreateClock& cmd) = 0;
-        virtual void set_io_delay(const SetIoDelay& cmd) = 0;
-        virtual void set_clock_groups(const SetClockGroups& cmd) = 0;
-        virtual void set_false_path(const SetFalsePath& cmd) = 0;
-        virtual void set_min_max_delay(const SetMinMaxDelay& cmd) = 0;
-        virtual void set_multicycle_path(const SetMulticyclePath& cmd) = 0;
-        virtual void set_clock_uncertainty(const SetClockUncertainty& cmd) = 0;
-        virtual void set_clock_latency(const SetClockLatency& cmd) = 0;
-        virtual void set_disable_timing(const SetDisableTiming& cmd) = 0;
-        virtual void set_timing_derate(const SetTimingDerate& cmd) = 0;
+    virtual void create_clock(const CreateClock& cmd) = 0;
+    virtual void set_io_delay(const SetIoDelay& cmd) = 0;
+    virtual void set_clock_groups(const SetClockGroups& cmd) = 0;
+    virtual void set_false_path(const SetFalsePath& cmd) = 0;
+    virtual void set_min_max_delay(const SetMinMaxDelay& cmd) = 0;
+    virtual void set_multicycle_path(const SetMulticyclePath& cmd) = 0;
+    virtual void set_clock_uncertainty(const SetClockUncertainty& cmd) = 0;
+    virtual void set_clock_latency(const SetClockLatency& cmd) = 0;
+    virtual void set_disable_timing(const SetDisableTiming& cmd) = 0;
+    virtual void set_timing_derate(const SetTimingDerate& cmd) = 0;
 
-        //End of parsing
-        virtual void finish_parse() = 0;
+    //End of parsing
+    virtual void finish_parse() = 0;
 
-        //Error during parsing
-        virtual void parse_error(const int curr_lineno, const std::string& near_text, const std::string& msg) = 0;
+    //Error during parsing
+    virtual void parse_error(const int curr_lineno, const std::string& near_text, const std::string& msg) = 0;
 };
 
 /*
@@ -136,7 +134,7 @@ void sdc_parse_filename(std::string filename, Callback& callback);
 void sdc_parse_filename(const char* filename, Callback& callback);
 
 //Loads from 'sdc'. 'filename' only used to pass a filename to callback and can be left unspecified
-void sdc_parse_file(FILE* sdc, Callback& callback, const char* filename=""); 
+void sdc_parse_file(FILE* sdc, Callback& callback, const char* filename = "");
 
 /*
  * Sentinal values
@@ -148,7 +146,7 @@ constexpr int UNINITIALIZED_INT = -1;
  * Enumerations to describe specific SDC command types and attributes
  */
 enum class IoDelayType {
-    INPUT, 
+    INPUT,
     OUTPUT
 };
 
@@ -174,8 +172,8 @@ enum class ClockLatencyType {
 };
 
 enum class StringGroupType {
-    STRING, 
-    PORT, 
+    STRING,
+    PORT,
     CLOCK,
     CELL,
     PIN
@@ -190,24 +188,24 @@ struct StringGroup {
     StringGroup(StringGroupType group_type)
         : type(group_type) {}
 
-    StringGroupType type = StringGroupType::STRING;   //The type of the string group, default is STRING. 
-                                                            // Groups derived from 'calls' to [get_clocks {...}] 
-                                                            // and [get_ports {...}] will have types SDC_CLOCK 
-                                                            // and SDC_PORT respectively.
-    std::vector<std::string> strings;                       //The strings in the group
+    StringGroupType type = StringGroupType::STRING;  //The type of the string group, default is STRING.
+                                                     // Groups derived from 'calls' to [get_clocks {...}]
+                                                     // and [get_ports {...}] will have types SDC_CLOCK
+                                                     // and SDC_PORT respectively.
+    std::vector<std::string> strings;                //The strings in the group
 };
 
 /*
  * Structures defining different SDC commands
  */
 struct CreateClock {
-    std::string name = "";                      //Name of the clock
-    double period = UNINITIALIZED_FLOAT;        //Clock period
-    double rise_edge = UNINITIALIZED_FLOAT;     //Rise time from waveform definition
-    double fall_edge = UNINITIALIZED_FLOAT;     //Fall time from waveform definition
-    StringGroup targets;                        //The set of strings indicating clock sources.
-                                                // May be explicit strings or regexs.
-    bool is_virtual = false;                    //Identifies this as a virtual (non-netlist) clock
+    std::string name = "";                   //Name of the clock
+    double period = UNINITIALIZED_FLOAT;     //Clock period
+    double rise_edge = UNINITIALIZED_FLOAT;  //Rise time from waveform definition
+    double fall_edge = UNINITIALIZED_FLOAT;  //Fall time from waveform definition
+    StringGroup targets;                     //The set of strings indicating clock sources.
+                                             // May be explicit strings or regexs.
+    bool is_virtual = false;                 //Identifies this as a virtual (non-netlist) clock
 };
 
 struct SetIoDelay {
@@ -215,100 +213,100 @@ struct SetIoDelay {
     SetIoDelay(IoDelayType io_type)
         : type(io_type) {}
 
-    IoDelayType type = IoDelayType::INPUT;          //Identifies whether this represents a
-                                                    // set_input_delay or set_output delay
-                                                    // command.
-    bool is_min = false;                            //Does delay apply for maximum delays?
-    bool is_max = false;                            //Does delay apply for minimum delays?
-                                                    // Note: is_min/is_max correspond to whether the option was 
-                                                    // provided, it is up to the application to handle the case 
-                                                    // where both are left unspecified (which SDC treats as 
-                                                    // implicitly specifying both)
-    std::string clock_name = "";                    //Name of the clock this constraint is associated with
-    double delay = UNINITIALIZED_FLOAT;             //The maximum input delay allowed on the target ports
-    StringGroup target_ports;                       //The target ports
+    IoDelayType type = IoDelayType::INPUT;  //Identifies whether this represents a
+                                            // set_input_delay or set_output delay
+                                            // command.
+    bool is_min = false;                    //Does delay apply for maximum delays?
+    bool is_max = false;                    //Does delay apply for minimum delays?
+                                            // Note: is_min/is_max correspond to whether the option was
+                                            // provided, it is up to the application to handle the case
+                                            // where both are left unspecified (which SDC treats as
+                                            // implicitly specifying both)
+    std::string clock_name = "";            //Name of the clock this constraint is associated with
+    double delay = UNINITIALIZED_FLOAT;     //The maximum input delay allowed on the target ports
+    StringGroup target_ports;               //The target ports
 };
 
 struct SetClockGroups {
-    ClockGroupsType type = ClockGroupsType::NONE;   //The type of clock group relation being specified
-    std::vector<StringGroup> clock_groups;          //The groups of clocks
+    ClockGroupsType type = ClockGroupsType::NONE;  //The type of clock group relation being specified
+    std::vector<StringGroup> clock_groups;         //The groups of clocks
 };
 
 struct SetFalsePath {
-    StringGroup from;                           //The source list of startpoints or clocks
-    StringGroup to;                             //The target list of endpoints or clocks
+    StringGroup from;  //The source list of startpoints or clocks
+    StringGroup to;    //The target list of endpoints or clocks
 };
 
 struct SetMinMaxDelay {
     SetMinMaxDelay() = default;
     SetMinMaxDelay(MinMaxType delay_type)
         : type(delay_type) {}
-    MinMaxType type = MinMaxType::NONE;         //Whether this is a min or max delay
-    double value = UNINITIALIZED_FLOAT;         //The maximum/minimum allowed delay between the from
-                                                // and to clocks
-    StringGroup from;                           //The source list of startpoints or clocks
-    StringGroup to;                             //The target list of endpoints or clocks
+    MinMaxType type = MinMaxType::NONE;  //Whether this is a min or max delay
+    double value = UNINITIALIZED_FLOAT;  //The maximum/minimum allowed delay between the from
+                                         // and to clocks
+    StringGroup from;                    //The source list of startpoints or clocks
+    StringGroup to;                      //The target list of endpoints or clocks
 };
 
 struct SetMulticyclePath {
-    bool is_setup = false;                      //Does mcp_value apply for setup?
-    bool is_hold = false;                       //Does mcp_value apply for hold?
-                                                // Note: is_setup/is_hold correspond to whether the option was 
-                                                // provided, it is up to the application to handle the case 
-                                                // where both are left unspecified (which SDC treats as
-                                                // applying mcp_value for the setup mcp, and 0 for the hold 
-                                                // mcp)
-    int mcp_value = UNINITIALIZED_INT;          //The number of cycles specifed
-    StringGroup from;                           //The source list of startpoints or clocks
-    StringGroup to;                             //The target list of endpoints or clocks
+    bool is_setup = false;              //Does mcp_value apply for setup?
+    bool is_hold = false;               //Does mcp_value apply for hold?
+                                        // Note: is_setup/is_hold correspond to whether the option was
+                                        // provided, it is up to the application to handle the case
+                                        // where both are left unspecified (which SDC treats as
+                                        // applying mcp_value for the setup mcp, and 0 for the hold
+                                        // mcp)
+    int mcp_value = UNINITIALIZED_INT;  //The number of cycles specifed
+    StringGroup from;                   //The source list of startpoints or clocks
+    StringGroup to;                     //The target list of endpoints or clocks
 };
 
 struct SetClockUncertainty {
-    bool is_setup = false;                      //Does value apply for setup?
-    bool is_hold = false;                       //Does value apply for hold?
-                                                // Note: is_setup/is_hold correspond to whether the option was 
-                                                // provided, it is up to the application to handle the case 
-                                                // where both are left unspecified (which SDC treats as 
-                                                // implicitly specifying both)
-    float value = UNINITIALIZED_FLOAT;          //The uncertainty value
+    bool is_setup = false;              //Does value apply for setup?
+    bool is_hold = false;               //Does value apply for hold?
+                                        // Note: is_setup/is_hold correspond to whether the option was
+                                        // provided, it is up to the application to handle the case
+                                        // where both are left unspecified (which SDC treats as
+                                        // implicitly specifying both)
+    float value = UNINITIALIZED_FLOAT;  //The uncertainty value
 
-    StringGroup from;                           //Launch clock domain(s)
-    StringGroup to;                             //Capture clock domain(s)
+    StringGroup from;  //Launch clock domain(s)
+    StringGroup to;    //Capture clock domain(s)
 };
 
 struct SetClockLatency {
-    ClockLatencyType type = ClockLatencyType::NONE;//Latency type
-    bool is_early = false;                         //Does value apply for early transitions?
-    bool is_late = false;                          //Does value apply for late transitions?
-                                                   // Note: is_early/is_late correspond to whether the option was 
-                                                   // provided, it is up to the application to handle the case 
-                                                   // where both are left unspecified (which SDC treats as 
-                                                   // implicitly specifying both)
-    float value = UNINITIALIZED_FLOAT;             //The latency value
+    ClockLatencyType type = ClockLatencyType::NONE;  //Latency type
+    bool is_early = false;                           //Does value apply for early transitions?
+    bool is_late = false;                            //Does value apply for late transitions?
+                                                     // Note: is_early/is_late correspond to whether the option was
+                                                     // provided, it is up to the application to handle the case
+                                                     // where both are left unspecified (which SDC treats as
+                                                     // implicitly specifying both)
+    float value = UNINITIALIZED_FLOAT;               //The latency value
 
-    StringGroup target_clocks;                     //The target clocks
+    StringGroup target_clocks;  //The target clocks
 };
 
 struct SetDisableTiming {
-    StringGroup from;                           //The source pins
-    StringGroup to;                             //The sink pins
+    StringGroup from;  //The source pins
+    StringGroup to;    //The sink pins
 };
 
 struct SetTimingDerate {
-    bool is_early = false;                      //Does value apply for early transitions?
-    bool is_late = false;                       //Does value apply for late transitions?
-                                                // Note: is_early/is_late correspond to whether the option was 
-                                                // provided, it is up to the application to handle the case 
-                                                // where both are left unspecified (which SDC treats as 
-                                                // implicitly specifying both)
-    bool derate_nets = false;                   //Should nets be derated?
-    bool derate_cells = false;                  //Should cells be derated?
+    bool is_early = false;      //Does value apply for early transitions?
+    bool is_late = false;       //Does value apply for late transitions?
+                                // Note: is_early/is_late correspond to whether the option was
+                                // provided, it is up to the application to handle the case
+                                // where both are left unspecified (which SDC treats as
+                                // implicitly specifying both)
+    bool derate_nets = false;   //Should nets be derated?
+    bool derate_cells = false;  //Should cells be derated?
 
-    float value = UNINITIALIZED_FLOAT;          //The derate value
+    float value = UNINITIALIZED_FLOAT;  //The derate value
 
-    StringGroup cell_targets;                   //The (possibly empty) set of target cells
+    StringGroup cell_targets;  //The (possibly empty) set of target cells
 };
 
-} //namespace
+}  // namespace sdcparse
 
 #endif

@@ -4,29 +4,25 @@
 #include <iostream>
 
 // tag::decl[]
-bool small_timeout(pugi::xml_node node)
-{
+bool small_timeout(pugi::xml_node node) {
     return node.attribute("Timeout").as_int() < 20;
 }
 
-struct allow_remote_predicate
-{
-    bool operator()(pugi::xml_attribute attr) const
-    {
+struct allow_remote_predicate {
+    bool operator()(pugi::xml_attribute attr) const {
         return strcmp(attr.name(), "AllowRemote") == 0;
     }
 
-    bool operator()(pugi::xml_node node) const
-    {
+    bool operator()(pugi::xml_node node) const {
         return node.attribute("AllowRemote").as_bool();
     }
 };
 // end::decl[]
 
-int main()
-{
+int main() {
     pugi::xml_document doc;
-    if (!doc.load_file("xgconsole.xml")) return -1;
+    if (!doc.load_file("xgconsole.xml"))
+        return -1;
 
     pugi::xml_node tools = doc.child("Profile").child("Tools");
 

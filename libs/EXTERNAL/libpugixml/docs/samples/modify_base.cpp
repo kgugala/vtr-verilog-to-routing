@@ -3,10 +3,10 @@
 #include <string.h>
 #include <iostream>
 
-int main()
-{
+int main() {
     pugi::xml_document doc;
-    if (!doc.load_string("<node id='123'>text</node><!-- comment -->", pugi::parse_default | pugi::parse_comments)) return -1;
+    if (!doc.load_string("<node id='123'>text</node><!-- comment -->", pugi::parse_default | pugi::parse_comments))
+        return -1;
 
     // tag::node[]
     pugi::xml_node node = doc.child("node");

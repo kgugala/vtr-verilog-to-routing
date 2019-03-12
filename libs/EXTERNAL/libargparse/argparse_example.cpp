@@ -18,16 +18,21 @@ struct OnOff {
     ConvertedValue<bool> from_str(std::string str) {
         ConvertedValue<bool> converted_value;
 
-        if      (str == "on")  converted_value.set_value(true);
-        else if (str == "off") converted_value.set_value(false);
-        else                   converted_value.set_error("Invalid argument value");
+        if (str == "on")
+            converted_value.set_value(true);
+        else if (str == "off")
+            converted_value.set_value(false);
+        else
+            converted_value.set_error("Invalid argument value");
         return converted_value;
     }
 
     ConvertedValue<std::string> to_str(bool val) {
         ConvertedValue<std::string> converted_value;
-        if (val) converted_value.set_value("on");
-        else     converted_value.set_value("off");
+        if (val)
+            converted_value.set_value("on");
+        else
+            converted_value.set_value("off");
         return converted_value;
     }
 
@@ -76,7 +81,7 @@ int main(int argc, const char** argv) {
         .default_value("false")
         .action(argparse::Action::STORE_TRUE);
 
-    parser.add_argument<bool,OnOff>(args.enable_bar, "--bar")
+    parser.add_argument<bool, OnOff>(args.enable_bar, "--bar")
         .help("Control whether bar is enabled")
         .default_value("off");
 
@@ -88,7 +93,7 @@ int main(int argc, const char** argv) {
         .help("Show version information")
         .action(argparse::Action::VERSION);
 
-    parser.add_argument<float,ZeroOneRange>(args.utilization, "--util")
+    parser.add_argument<float, ZeroOneRange>(args.utilization, "--util")
         .help("Sets target utilization")
         .default_value("1.0");
 
@@ -119,22 +124,26 @@ int main(int argc, const char** argv) {
             std::cout << "Doing foo with " << args.filename << "\n";
         }
         if (args.verbosity > 1) {
-            std::cout << "Doing foo step 1" << "\n";
-            std::cout << "Doing foo step 2" << "\n";
-            std::cout << "Doing foo step 3" << "\n";
+            std::cout << "Doing foo step 1"
+                      << "\n";
+            std::cout << "Doing foo step 2"
+                      << "\n";
+            std::cout << "Doing foo step 3"
+                      << "\n";
         }
     }
 
     if (args.enable_bar) {
         if (args.verbosity > 0) {
-            std::cout << "Bar is enabled" << "\n";
+            std::cout << "Bar is enabled"
+                      << "\n";
         }
     } else {
         if (args.verbosity > 0) {
-            std::cout << "Bar is disabled" << "\n";
+            std::cout << "Bar is disabled"
+                      << "\n";
         }
     }
 
     return 0;
 }
-

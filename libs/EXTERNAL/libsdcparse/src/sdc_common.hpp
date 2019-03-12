@@ -88,5 +88,5 @@ void sdc_string_group_add_strings(StringGroup& sdc_string_group, const StringGro
 char* strdup(const char* src);
 char* strndup(const char* src, size_t len);
 
-} //namespace
+}  // namespace sdcparse
 #endif
