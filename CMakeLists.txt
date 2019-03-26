@@ -382,12 +382,7 @@ set(code_format_files
     -name '*.cpp' -print -o -name '*.h' -print
     -o -name '*.tpp' -print -o -name '*.hpp' -print)
 
-set(code_format_dirs
-    ${PROJECT_SOURCE_DIR}/vpr/src
-    ${PROJECT_SOURCE_DIR}/libs/EXTERNAL/libsdcparse
-    ${PROJECT_SOURCE_DIR}/libs/EXTERNAL/libblifparse
-    ${PROJECT_SOURCE_DIR}/libs/EXTERNAL/libtatum
-    ${PROJECT_SOURCE_DIR}/libs/EXTERNAL)
+set(code_format_dirs ${PROJECT_SOURCE_DIR}/vpr/src)
 
 #
 # Use clang-format-5.0 for code format
